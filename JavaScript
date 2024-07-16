@@ -1,0 +1,69 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contactForm');
+    const navigateButton = document.getElementById('navigateButton');
+    const geoButton = document.getElementById('geoButton');
+
+  
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (validateForm()) {
+            alert('Formulário enviado com sucesso!');
+        }
+    });
+
+    function validateForm() {
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !email || !message) {
+            alert('Por favor, preencha todos os campos.');
+            return false;
+        }
+
+   
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Por favor, insira um e-mail válido.');
+            return false;
+        }
+
+        return true;
+    }
+
+   
+    navigateButton.addEventListener('click', () => {
+        history.pushState({ page: 1 }, 'título', '?page=1');
+        alert('Você navegou para uma nova página!');
+    });
+
+    
+    geoButton.addEventListener('click', () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            alert('Geolocalização não é suportada por este navegador.');
+        }
+    });
+
+    function showPosition(position) {
+        alert('Latitude: ' + position.coords.latitude + '\nLongitude: ' + position.coords.longitude);
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert('Usuário negou a solicitação de geolocalização.');
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert('Informação de localização não disponível.');
+                break;
+            case error.TIMEOUT:
+                alert('A solicitação para obter a localização expirou.');
+                break;
+            case error.UNKNOWN_ERROR:
+                alert('Ocorreu um erro desconhecido.');
+                break;
+        }
+    }
+});
